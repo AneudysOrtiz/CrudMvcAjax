@@ -1,0 +1,113 @@
+﻿@model IEnumerable<WebApplication1.Models.Clientes>
+
+<br />
+
+<h4>Clientes registrados</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.correo)
+        </th>
+        <th></th>
+    </tr>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.apellido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.correo)
+        </td>
+        <td>
+            <button onclick="editar(@item.idCliente)" class="btn btn-warning btn-sm">Editar</button> |           
+            <button onclick="eliminar(@item.idCliente)" class="btn btn-danger btn-sm">Eliminar</button>
+        </td>
+    </tr>
+    }
+}
+
+</table>
+
+
+<script>
+
+    function eliminar(id){
+        if (confirm("Desea eliminar este cliente")) {
+            $.ajax({
+                url:"@Url.Action("Eliminar", "Clientes")",
+                method:"POST",
+                data:{
+                    id:id
+                },
+
+                success: function (resultado) {
+                    window.location.reload();
+                    alert("Cliente eliminado con exito!");
+                   
+                },error: function(e){
+                    console.log(e);
+                    alert("No se pudo eliminar");
+                }
+
+
+            });
+        }
+
+    }
+</script>
+
+
+<div class="modal fade" id="editarmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar cliente</h4>
+            </div>
+
+            <div class="modal-body">
+
+
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input class="form-control" type="text" name="nombre" required id="nombre" />
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido">Apellido</label>
+                    <input class="form-control" type="text" name="apellido" required id="apellido" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input class="form-control" type="email" name="correo" required id="correo" />
+                </div>
+
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" id="enviar" class="btn btn-success">Enviar</button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

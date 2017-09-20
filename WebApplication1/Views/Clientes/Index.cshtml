@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+}
+
+<h2>Registro de clientes</h2>
+
+@Html.Partial("Agregar")
+
+@{WebApplication1.DAL.GeneralContext db = new WebApplication1.DAL.GeneralContext(); }
+@Html.Partial("Lista", db.Clientes.ToList())
+
+<script>
+    $("#enviar").click(function () {
+        if ($("#nombre").val() <= 0 || $("#apellido").val() <= 0 || $("#correo").val() <= 0) {
+            alert("Debe completar todos los campos");
+        } else {
+            $('#registromodal').modal('hide');
+           $.ajax({
+
+                method: "POST",
+                data: {
+                    nombre: $("#nombre").val(), apellido: $("#apellido").val(),
+                correo: $("#correo").val()},
+
+                url: "@Url.Action("Guardar", "Clientes")",
+                success: function (resultado) {
+                    window.location.reload();
+                    alert("Cliente Registrado!");
+                   
+
+                }, error: function (msg) {
+                    console.log(msg);
+                    alert("No se pudo registrar" + msg);
+                }
+            });
+
+
+
+
+        }
+
+    });
+
+ 
+
+
+</script>
